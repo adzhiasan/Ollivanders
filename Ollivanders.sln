@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ollivanders", "Ollivanders\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ollivanders.Tests", "Ollivanders.Tests\Ollivanders.Tests.csproj", "{EC6F3018-F12E-4ECC-965D-0E201A2A790E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ollivanders.Services", "Ollivanders.Services\Ollivanders.Services.csproj", "{F80A270B-DD5E-48A5-BB5A-AA97C7502AE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{EC6F3018-F12E-4ECC-965D-0E201A2A790E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC6F3018-F12E-4ECC-965D-0E201A2A790E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC6F3018-F12E-4ECC-965D-0E201A2A790E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F80A270B-DD5E-48A5-BB5A-AA97C7502AE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F80A270B-DD5E-48A5-BB5A-AA97C7502AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F80A270B-DD5E-48A5-BB5A-AA97C7502AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F80A270B-DD5E-48A5-BB5A-AA97C7502AE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
