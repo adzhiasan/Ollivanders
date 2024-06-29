@@ -11,23 +11,35 @@ public sealed class MagicWandController : ControllerBase
     {
         _repository = repository;
     }
-
-    [HttpGet("get/{id}")]
+    
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetMagicWandById(int id)
     {
         var magicWand = await _repository.TryGetByIdAsync(id);
         if (magicWand is null)
-            return BadRequest($"Magicwand with this id={id} not found.");
+            return BadRequest($"Magic wand with this id={id} not found.");
 
         return Ok(magicWand);
+    }
+    
+    [HttpGet("price/{id}")]
+    public async Task<IActionResult> GetMagicWandPriceById(int id)
+    {
+        var magicWand = await _repository.TryGetByIdAsync(id);
+        if (magicWand is null)
+            return BadRequest($"Magic wand with this id={id} not found.");
+
+        var result = magicWand.GetPrice();
+
+        return Ok(result);
     }
     
     [HttpPost("create")]
     public async Task<IActionResult> CreateMagicWand([FromBody] MagicWandCreationDto dto)
     {
         var magicWand = dto.ToMagicWand();
-        await _repository.CreateAsync(magicWand);
+        var result = await _repository.CreateAsync(magicWand);
     
-        return Ok(magicWand.Id);
+        return Ok(result);
     }
 }
