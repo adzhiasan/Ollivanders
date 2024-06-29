@@ -2,7 +2,8 @@ namespace Ollivanders;
 
 public sealed class MagicWand
 {
-    private readonly IDictionary<string, double> _woodPriceDictionary = new Dictionary<string, double>
+    private readonly IDictionary<string, double> _woodPriceDictionary =
+        new Dictionary<string, double>(StringComparer.InvariantCultureIgnoreCase)
     {
         { "Yew", 0.2 },
         { "Ilex", 0.2 },
@@ -11,6 +12,7 @@ public sealed class MagicWand
     };
 
     private readonly IDictionary<string, double> _corePriceDictionary = new Dictionary<string, double>
+        (StringComparer.InvariantCultureIgnoreCase)
     {
         { "DragonVein", 2d },
         { "UnicornHorn", 1.6 },
@@ -34,7 +36,8 @@ public sealed class MagicWand
         Core = core;
     }
 
-    public int Length { get; init;  }
+    public int Id { get; set; }
+    public int Length { get; init; }
     public double FlexibilityFactor { get; init; }
     public string Wood { get; init; }
     public string Core { get; init; }
