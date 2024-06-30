@@ -1,9 +1,19 @@
 namespace Ollivanders;
 
-public class UnicornMagicWand : MagicWand
+public abstract record WandCore
 {
-    public UnicornMagicWand(int length, double flexibilityFactor, string wood, int unicornAge) : base(length,
-        flexibilityFactor, wood, "UnicornHorn")
+    public abstract string Name { get; }
+
+    public abstract double GetPrice();
+}
+
+public record UnicornWandCore : WandCore
+{
+    public override string Name => "UnicornHorn";
+
+    public int UnicornAge { get; }
+
+    public UnicornWandCore(int unicornAge)
     {
         if (unicornAge is < 20 or > 300)
             throw new ArgumentException(nameof(unicornAge));
@@ -11,31 +21,7 @@ public class UnicornMagicWand : MagicWand
         UnicornAge = unicornAge;
     }
 
-    public int UnicornAge { get; init; }
-
-    protected override double GetCorePrice()
-    {
-        if (UnicornAge > 100)
-            return base.GetCorePrice() * (UnicornAge / 100d);
-    }
-
-    protected override double GetWoodPrice()
-    {
-        var basePrice = base.GetPrice();
-    }
-}
-
-abstract record WandCore(string Name)
-{
-    protected abstract double GetCorePrice();
-}
-
-record UnicornWandCore(int UnicornAge)
-    : WandCore(Name)
-{
-    private const string Name = "UnicornHorn";
-    
-    protected override double GetCorePrice()
+    public override double GetPrice()
     {
         var basePrice = 1.6d;
 
@@ -45,9 +31,38 @@ record UnicornWandCore(int UnicornAge)
     }
 }
 
-abstract record WandWood(string Name)
+public record DragonVeinWandCore(DragonSpecies DragonSpecies) : WandCore
 {
-    protected abstract double GetWoodPrice();
+    public override string Name => "DragonVein";
+
+    public override double GetPrice()
+    {
+        var basePrice = 2d;
+
+        return DragonSpecies switch
+        {
+            DragonSpecies.HungarianHorntail => basePrice * 2.25,
+            DragonSpecies.ChineseFireball => basePrice * 1.45,
+            DragonSpecies.RomanianLonghorn => basePrice * 1.0,
+            DragonSpecies.NorwegianRidgeback => basePrice * 0.92,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+}
+
+record PhoenixFeatherWandCore(DragonSpecies DragonSpecies) : WandCore
+{
+    public override string Name => "PhoenixFeather";
+
+    public override double GetPrice() => 4d;
+}
+
+public enum DragonSpecies
+{
+    HungarianHorntail,
+    ChineseFireball,
+    RomanianLonghorn,
+    NorwegianRidgeback
 }
 
 public class MagicWand
@@ -61,15 +76,8 @@ public class MagicWand
             { "Oak", 0.4 }
         };
 
-    private readonly IDictionary<string, double> _corePriceDictionary = new Dictionary<string, double>
-        (StringComparer.InvariantCultureIgnoreCase)
-        {
-            { "DragonVein", 2d },
-            { "UnicornHorn", 1.6 },
-            { "PhoenixFeather", 4d }
-        };
 
-    public MagicWand(int length, double flexibilityFactor, string wood, string core)
+    public MagicWand(int length, double flexibilityFactor, string wood, WandCore core)
     {
         if (length is < 18 or > 50)
             throw new ArgumentException(nameof(length));
@@ -77,8 +85,6 @@ public class MagicWand
             throw new ArgumentException(nameof(flexibilityFactor));
         if (!_woodPriceDictionary.ContainsKey(wood))
             throw new ArgumentException(nameof(wood));
-        if (!_corePriceDictionary.ContainsKey(core))
-            throw new ArgumentException(nameof(core));
 
         Length = length;
         FlexibilityFactor = flexibilityFactor;
@@ -90,24 +96,17 @@ public class MagicWand
     public int Length { get; init; }
     public double FlexibilityFactor { get; init; }
     public string Wood { get; init; }
-    public string Core { get; init; }
+    public WandCore Core { get; init; }
 
     public double GetPrice()
     {
-        return GetCorePrice() + GetWoodPrice();
+        return Core.GetPrice() + GetWoodPrice();
     }
 
-    protected virtual double GetWoodPrice()
+    private double GetWoodPrice()
     {
         if (_woodPriceDictionary.TryGetValue(Wood, out var woodPrice))
             return woodPrice;
-        throw new InvalidOperationException("Object in non-consistent state.");
-    }
-
-    protected virtual double GetCorePrice()
-    {
-        if (_corePriceDictionary.TryGetValue(Core, out var corePrice))
-            return corePrice;
         throw new InvalidOperationException("Object in non-consistent state.");
     }
 }
