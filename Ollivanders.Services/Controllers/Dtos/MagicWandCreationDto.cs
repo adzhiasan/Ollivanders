@@ -4,7 +4,7 @@ public sealed class MagicWandCreationDto
 {
     public int Length { get; init; }
     public double FlexibilityFactor { get; init; }
-    public string Wood { get; init; }
+    public string WoodName { get; init; }
     public ICoreDto Core { get; init; }
 
     public MagicWand ToMagicWand()
@@ -12,6 +12,6 @@ public sealed class MagicWandCreationDto
         var factory = new CoreFactory();
         var core = factory.CreateCore(Core);    
         
-        return new MagicWand(Length, FlexibilityFactor, Wood,  core);
+        return new MagicWand(Length, FlexibilityFactor, new WandWood(WoodName),  core);
     }
 }

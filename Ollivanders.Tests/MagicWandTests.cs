@@ -8,7 +8,7 @@ public class MagicWandTests
     private static readonly WandCore Core = new UnicornWandCore(unicornAge: 20);
     private const double FlexibilityFactor = 0.05;
     private const int Length = 20;
-    private const string Wood = "Oak";
+    private static readonly WandWood Wood = new("Oak");
 
     [DataTestMethod]
     [DataRow(17)]
@@ -29,17 +29,6 @@ public class MagicWandTests
     {
         // Act
         var act = () => new MagicWand(Length, flexibilityFactor, Wood, Core);
-
-        // Assert
-        Assert.ThrowsException<ArgumentException>(act);
-    }
-
-    [TestMethod]
-    [DataRow("TestWoodType")]
-    public void ShouldThrowArgumentException_WhenNotValidWood(string wood)
-    {
-        // Act
-        var act = () => new MagicWand(Length, FlexibilityFactor, wood, Core);
 
         // Assert
         Assert.ThrowsException<ArgumentException>(act);
@@ -67,7 +56,7 @@ public class MagicWandTests
         var magicWand = new MagicWand(
             20,
             0.1,
-            "Oak",
+            new WandWood("Oak"),
             new UnicornWandCore(unicornAge: 20));
 
         // Act
