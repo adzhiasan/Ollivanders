@@ -5,11 +5,11 @@ namespace Ollivanders.Tests;
 [TestClass]
 public class MagicWandTests
 {
-    private const string Core = "DragonVein";
+    private static readonly WandCore Core = new UnicornWandCore(unicornAge: 20);
     private const double FlexibilityFactor = 0.05;
     private const int Length = 20;
     private const string Wood = "Oak";
-    
+
     [DataTestMethod]
     [DataRow(17)]
     [DataRow(51)]
@@ -17,7 +17,7 @@ public class MagicWandTests
     {
         // Act
         var act = () => new MagicWand(length, FlexibilityFactor, Wood, Core);
-        
+
         // Assert
         Assert.ThrowsException<ArgumentException>(act);
     }
@@ -29,7 +29,7 @@ public class MagicWandTests
     {
         // Act
         var act = () => new MagicWand(Length, flexibilityFactor, Wood, Core);
-        
+
         // Assert
         Assert.ThrowsException<ArgumentException>(act);
     }
@@ -40,18 +40,7 @@ public class MagicWandTests
     {
         // Act
         var act = () => new MagicWand(Length, FlexibilityFactor, wood, Core);
-        
-        // Assert
-        Assert.ThrowsException<ArgumentException>(act);
-    }
 
-    [TestMethod]
-    [DataRow("TestCore")]
-    public void ShouldThrowArgumentException_WhenNotValidCore(string core)
-    {
-        // Act
-        var act = () => new MagicWand(Length, FlexibilityFactor, Wood, core);
-        
         // Assert
         Assert.ThrowsException<ArgumentException>(act);
     }
@@ -68,7 +57,7 @@ public class MagicWandTests
         Assert.AreEqual(Wood, magicWand.Wood);
         Assert.AreEqual(Core, magicWand.Core);
     }
-    
+
     [TestMethod]
     public void ShouldReturnExpectedPrice_WhenOakWoodAndUnicornCore()
     {
@@ -79,7 +68,7 @@ public class MagicWandTests
             20,
             0.1,
             "Oak",
-            "UnicornHorn");
+            new UnicornWandCore(unicornAge: 20));
 
         // Act
         var actualPrice = magicWand.GetPrice();

@@ -24,7 +24,7 @@ public class UnicornHornWandCoreTests
     public void ShouldReturnBasePrice_WhenAgeLessOrEqualTo100(int unicornAge)
     {
         // Act
-        var price = new UnicornWandCore(unicornAge).GetPrice();
+        var price = new UnicornWandCore(unicornAge).GetPrice().Value;
 
         // Assert
         price.Should().BeApproximately(1.6d, 0.01);
@@ -36,7 +36,7 @@ public class UnicornHornWandCoreTests
     public void ShouldReturnMultipliedPrice_WhenAgeMoreThan100(int unicornAge, double expectedPrice)
     {
         // Act
-        var price = new UnicornWandCore(unicornAge).GetPrice();
+        var price = new UnicornWandCore(unicornAge).GetPrice().Value;
 
         // Assert
         price.Should().BeApproximately(expectedPrice, 0.01);

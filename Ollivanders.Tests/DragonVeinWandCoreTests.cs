@@ -12,7 +12,7 @@ public class DragonVeinWandCoreTests
     public void ShouldReturnMultipliedPriceForConcreteDragonSpecies(DragonSpecies dragonSpecies, double expectedPrice)
     {
         // Act
-        var price = new DragonVeinWandCore(dragonSpecies).GetPrice();
+        var price = new DragonVeinWandCore(dragonSpecies).GetPrice().Value;
 
         // Assert
         price.Should().BeApproximately(expectedPrice, 0.01);
