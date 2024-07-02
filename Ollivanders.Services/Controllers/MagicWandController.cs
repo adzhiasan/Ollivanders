@@ -19,7 +19,7 @@ public sealed class MagicWandController : ControllerBase
         if (magicWand is null)
             return BadRequest($"Magic wand with this id={id} not found.");
 
-        return Ok(magicWand);
+        return Ok(magicWand.ToMagicWandResponseDto());
     }
 
     [HttpGet("price/{id}")]
@@ -34,8 +34,9 @@ public sealed class MagicWandController : ControllerBase
         return Ok(result);
     }
 
+
     [HttpPost("create")]
-    public async Task<IActionResult> CreateMagicWand([FromBody] MagicWandCreationDto dto)
+    public async Task<IActionResult> CreateMagicWand([FromBody] MagicWandRequestDto dto)
     {
         var magicWand = dto.ToMagicWand();
         var result = await _repository.CreateAsync(magicWand);

@@ -13,12 +13,12 @@ public sealed class MagicWandRepository
         _set = databaseContext.Set<MagicWand>();
     }
 
-    public async Task<int> CreateAsync(MagicWand magicWand)
+    public async Task<MagicWand> CreateAsync(MagicWand magicWand)
     {
         await _set.AddAsync(magicWand);
         await _databaseContext.SaveChangesAsync();
 
-        return magicWand.Id;
+        return magicWand;
     }
     
     public async Task<MagicWand?> TryGetByIdAsync(int id)
