@@ -1,68 +1,19 @@
 namespace Ollivanders;
 
-public abstract record WandCore
+public record Price
 {
-    public abstract string Name { get; }
+    public double Value { get; set; }
 
-    public abstract double GetPrice();
-}
-
-public record UnicornWandCore : WandCore
-{
-    public override string Name => "UnicornHorn";
-
-    public int UnicornAge { get; }
-
-    public UnicornWandCore(int unicornAge)
+    public Price(double price)
     {
-        if (unicornAge is < 20 or > 300)
-            throw new ArgumentException(nameof(unicornAge));
+        if (price < 0)
+            throw new ArgumentException(nameof(price));
 
-        UnicornAge = unicornAge;
+        Value = price;
     }
 
-    public override double GetPrice()
-    {
-        var basePrice = 1.6d;
-
-        if (UnicornAge > 100)
-            return basePrice * (UnicornAge / 100d);
-        return basePrice;
-    }
-}
-
-public record DragonVeinWandCore(DragonSpecies DragonSpecies) : WandCore
-{
-    public override string Name => "DragonVein";
-
-    public override double GetPrice()
-    {
-        var basePrice = 2d;
-
-        return DragonSpecies switch
-        {
-            DragonSpecies.HungarianHorntail => basePrice * 2.25,
-            DragonSpecies.ChineseFireball => basePrice * 1.45,
-            DragonSpecies.RomanianLonghorn => basePrice * 1.0,
-            DragonSpecies.NorwegianRidgeback => basePrice * 0.92,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-    }
-}
-
-record PhoenixFeatherWandCore(DragonSpecies DragonSpecies) : WandCore
-{
-    public override string Name => "PhoenixFeather";
-
-    public override double GetPrice() => 4d;
-}
-
-public enum DragonSpecies
-{
-    HungarianHorntail,
-    ChineseFireball,
-    RomanianLonghorn,
-    NorwegianRidgeback
+    public static Price operator +(Price p1, Price p2) =>
+        new(p1.Value + p2.Value);
 }
 
 public class MagicWand
@@ -100,13 +51,13 @@ public class MagicWand
 
     public double GetPrice()
     {
-        return Core.GetPrice() + GetWoodPrice();
+        return (Core.GetPrice() + GetWoodPrice()).Value;
     }
 
-    private double GetWoodPrice()
+    private Price GetWoodPrice()
     {
         if (_woodPriceDictionary.TryGetValue(Wood, out var woodPrice))
-            return woodPrice;
+            return new Price(woodPrice);
         throw new InvalidOperationException("Object in non-consistent state.");
     }
 }

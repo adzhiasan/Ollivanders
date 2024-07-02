@@ -11,7 +11,7 @@ public sealed class MagicWandController : ControllerBase
     {
         _repository = repository;
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMagicWandById(int id)
     {
@@ -21,7 +21,7 @@ public sealed class MagicWandController : ControllerBase
 
         return Ok(magicWand);
     }
-    
+
     [HttpGet("price/{id}")]
     public async Task<IActionResult> GetMagicWandPriceById(int id)
     {
@@ -33,13 +33,13 @@ public sealed class MagicWandController : ControllerBase
 
         return Ok(result);
     }
-    
+
     [HttpPost("create")]
     public async Task<IActionResult> CreateMagicWand([FromBody] MagicWandCreationDto dto)
     {
         var magicWand = dto.ToMagicWand();
         var result = await _repository.CreateAsync(magicWand);
-    
+
         return Ok(result);
     }
 }
