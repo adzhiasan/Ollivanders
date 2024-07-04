@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Ollivanders;
 
 public class MagicWand
@@ -20,6 +22,8 @@ public class MagicWand
     public double FlexibilityFactor { get; init; }
     public WandWood Wood { get; init; }
     public WandCore Core { get; init; }
+    public List<Mage> Mages { get; set; }
+    public bool IsSold { get; set; }
 
     public double GetPrice()
     {

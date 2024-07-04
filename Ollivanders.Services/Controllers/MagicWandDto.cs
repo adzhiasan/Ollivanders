@@ -6,6 +6,7 @@ public class MagicWandRequestDto
     public double FlexibilityFactor { get; init; }
     public required string Wood { get; init; }
     public required CoreDto Core { get; init; }
+    public List<int> PreviousOwners { get; init; }
 
     public MagicWand ToMagicWand()
     {

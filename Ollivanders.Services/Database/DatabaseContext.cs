@@ -13,5 +13,13 @@ public sealed class DatabaseContext : DbContext
         modelBuilder
             .Entity<MagicWand>()
             .ToTable("MagicWands");
+        
+        modelBuilder
+            .Entity<Mage>()
+            .ToTable("Mages");
+        
+        modelBuilder
+            .Entity<MageMagicWand>()
+            .ToTable("MageMagicWands");
     }
 }
