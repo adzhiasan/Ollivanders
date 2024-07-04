@@ -5,11 +5,11 @@ public class MagicWandRequestDto
     public int Length { get; init; }
     public double FlexibilityFactor { get; init; }
     public required string Wood { get; init; }
-    public required string Core { get; init; }
+    public required CoreDto Core { get; init; }
 
     public MagicWand ToMagicWand()
     {
-        return new MagicWand(Length, FlexibilityFactor, Wood, Core);
+        return new MagicWand(Length, FlexibilityFactor, new WandWood(Wood), Core.ToWandCore());
     }
 }
 
@@ -26,8 +26,8 @@ internal static class MagicWandExtensions
         {
             Length = magicWand.Length,
             FlexibilityFactor = magicWand.FlexibilityFactor,
-            Wood = magicWand.Wood,
-            Core = magicWand.Core,
+            Wood = magicWand.Wood.Name,
+            Core = magicWand.Core.ToCoreDto(),
             Price = magicWand.GetPrice()
         };
     }

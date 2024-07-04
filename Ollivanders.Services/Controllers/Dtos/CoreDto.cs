@@ -1,36 +1,56 @@
-using System.Text.Json.Serialization;
-
 namespace Ollivanders.Services.Controllers;
 
-[JsonDerivedType(typeof(UnicornHornCoreDto), UnicornHornCoreDto.Type)]
-[JsonDerivedType(typeof(DragonVeinCoreDto), DragonVeinCoreDto.Type)]
-[JsonDerivedType(typeof(PhoenixFeatherCoreDto), PhoenixFeatherCoreDto.Type)]
-public interface ICoreDto
+public record CoreDto
 {
-    TResult Accept<TResult>(ICoreDtoVisitor<TResult> v);
+    public int? UnicornAge { get; init; }
+
+    public string? DragonSpecies { get; init; }
+
+    public string CoreName { get; init; }
+
+    public WandCore ToWandCore()
+    {
+        return CoreName switch
+        {
+            CoreNames.DragonVein => new DragonVeinWandCore(DragonSpecies),
+            CoreNames.UnicornHorn => new UnicornWandCore(UnicornAge.Value),
+            CoreNames.PhoenixFeather => new PhoenixFeatherWandCore(),
+            _ => throw new ArgumentOutOfRangeException(nameof(CoreName),
+                $"Not expected direction value: {CoreName}")
+        };
+    }
 }
 
-public record UnicornHornCoreDto : ICoreDto
+public static class WandCoreExtensions
 {
-    public const string Type = "UnicornHorn";
+    public static CoreDto ToCoreDto(this WandCore wandCore)
+    {
+        int? unicornAge = 0;
+        string? dragonSpecies = null;
+        string coreName;
 
-    public int Age { get; set; }
+        switch (wandCore.Name)
+        {
+            case CoreNames.DragonVein:
+                dragonSpecies = ((DragonVeinWandCore)wandCore).DragonSpecies.ToString();
+                coreName = CoreNames.DragonVein;
+                break;
+            case CoreNames.UnicornHorn:
+                unicornAge = ((UnicornWandCore)wandCore).UnicornAge;
+                coreName = CoreNames.UnicornHorn;
+                break;
+            case CoreNames.PhoenixFeather:
+                coreName = CoreNames.PhoenixFeather;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(wandCore.Name));
+        }
 
-    public TResult Accept<TResult>(ICoreDtoVisitor<TResult> v) => v.Visit(this);
-}
-
-public record DragonVeinCoreDto : ICoreDto
-{
-    public const string Type = "DragonVein";
-
-    public DragonSpecies DragonSpecies { get; set; }
-
-    public TResult Accept<TResult>(ICoreDtoVisitor<TResult> v) => v.Visit(this);
-}
-
-public record PhoenixFeatherCoreDto : ICoreDto
-{
-    public const string Type = "PhoenixFeather";
-
-    public TResult Accept<TResult>(ICoreDtoVisitor<TResult> v) => v.Visit(this);
+        return new CoreDto
+        {
+            UnicornAge = unicornAge,
+            DragonSpecies = dragonSpecies,
+            CoreName = coreName
+        };
+    }
 }

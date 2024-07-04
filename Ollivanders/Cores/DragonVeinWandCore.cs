@@ -2,6 +2,10 @@ using Ollivanders;
 
 public record DragonVeinWandCore(DragonSpecies DragonSpecies) : WandCore
 {
+    public DragonVeinWandCore(string dragonSpeciesName) : this(Enum.Parse<DragonSpecies>(dragonSpeciesName))
+    {
+    }
+
     public override string Name => CoreNames.DragonVein;
 
     public override Price GetPrice()
