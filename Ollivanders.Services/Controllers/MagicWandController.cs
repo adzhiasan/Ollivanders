@@ -67,14 +67,14 @@ public sealed class MagicWandController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("repair/{magicWandId}/{part}")]
-    public async Task<IActionResult> RepairMagicWandPartAsync([FromRoute] int magicWandId, [FromRoute] WandPart part)
+    [HttpPost("repair")]
+    public async Task<IActionResult> RepairMagicWandPartAsync([FromBody] MagicWandRepairDto repairDto)
     {
-        var repairInfo = await _magicWandRepairInfoRepository.TryGetByMagicWandIdAsync(magicWandId);
+        var repairInfo = await _magicWandRepairInfoRepository.TryGetByMagicWandIdAsync(repairDto.MagicWandId);
         if (repairInfo is null)
-            return BadRequest($"Magic wand repair info with this id={magicWandId} not found.");
+            return BadRequest($"Magic wand repair info with this id={repairDto.MagicWandId} not found.");
 
-        var partToRepair = repairInfo.GetPartToRepair(part);
+        var partToRepair = repairInfo.GetPartToRepair(repairDto.Part);
         var result = partToRepair.TryRepair();
         await _magicWandRepairInfoRepository.SaveAsync();
 
