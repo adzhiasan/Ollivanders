@@ -23,13 +23,19 @@ public sealed class MagicWandRepository
     
     public async Task<MagicWand?> TryGetByIdAsync(int id)
     {
-        return await _set.SingleOrDefaultAsync(w => w.Id == id);
+        return await _set.Include(mw => mw.Mages).SingleOrDefaultAsync(w => w.Id == id);
     }
     
     public async Task<MagicWand> GetByIdAsync(int id)
     {
         return await _set.SingleAsync(w => w.Id == id);
-    } 
+    }
+    
+    public async Task UpdateAsync(MagicWand magicWand)
+    {
+        _set.Update(magicWand);
+        await _databaseContext.SaveChangesAsync();
+    }
 
     public async Task RemoveAsync(int id)
     {

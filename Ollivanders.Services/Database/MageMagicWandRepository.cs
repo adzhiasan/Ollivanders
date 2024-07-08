@@ -33,10 +33,4 @@ public sealed class MageMagicWandRepository
     {
         return _set.Where(m => m.MagicWandId == magicWandId).Select(m => m.MageId).AsEnumerable();
     }
-    
-    public async Task UpdateAsync(MageMagicWand magicWand)
-    {
-        _set.Update(magicWand);
-        await _databaseContext.SaveChangesAsync();
-    }
 }

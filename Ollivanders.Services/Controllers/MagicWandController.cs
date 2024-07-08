@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Ollivanders.Services.Database;
 
@@ -9,28 +10,36 @@ public sealed class MagicWandController : ControllerBase
     private readonly MagesRepository _magesRepository;
     private readonly MageMagicWandRepository _mageMagicWandRepository;
 
-    public MagicWandController(MagicWandRepository repository, MagesRepository magesRepository, MageMagicWandRepository mageMagicWandRepository)
+    public MagicWandController(MagicWandRepository repository, MagesRepository magesRepository,
+        MageMagicWandRepository mageMagicWandRepository)
     {
         _magicWandRepository = repository;
         _magesRepository = magesRepository;
         _mageMagicWandRepository = mageMagicWandRepository;
     }
-    
+
     [HttpPut("sell")]
     public async Task<IActionResult> SellMagicWandById([FromQuery] int magicWandId, [FromQuery] int mageId)
     {
         var magicWand = await _magicWandRepository.TryGetByIdAsync(magicWandId);
         if (magicWand is null)
-            return BadRequest($"Mage with this id={magicWandId} not found.");
-        if (magicWand.IsSold)
-            return BadRequest($"Magic wand with this id={magicWandId} already sold.");
+            throw new ValidationException($"Magic wand with this id={magicWand.Id} not found.");
+
         var mage = await _magesRepository.TryGetByIdAsync(mageId);
-        var mages = _mageMagicWandRepository.GetMageIdsByMagicWandId(magicWandId);
-        if (mages.Any() && mage.DateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-18))
-            return BadRequest($"Younger than 18 years.");
-        
-        magicWand.IsSold = true;
-        await _mageMagicWandRepository.UpdateAsync(new MageMagicWand(mageId, magicWandId));
+        if (mage is null)
+            throw new ValidationException($"Mage with this id={magicWand.Id} not found.");
+
+        MagicWand soldMagicWand;
+        try
+        {
+            soldMagicWand = SellHelper.SellMagicWand(magicWand, mage);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        await _magicWandRepository.UpdateAsync(soldMagicWand);
 
         return Ok();
     }
