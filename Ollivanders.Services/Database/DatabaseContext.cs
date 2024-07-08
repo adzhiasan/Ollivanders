@@ -18,8 +18,7 @@ public sealed class DatabaseContext : DbContext
             .Entity<Mage>()
             .ToTable("Mages");
         
-        modelBuilder
-            .Entity<MageMagicWand>()
+        modelBuilder.Entity<MageMagicWand>()
             .ToTable("MageMagicWands");
     }
 }

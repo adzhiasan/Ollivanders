@@ -7,10 +7,17 @@ public class MagicWandRequestDto
     public required string Wood { get; init; }
     public required CoreDto Core { get; init; }
     public List<int> PreviousOwners { get; init; }
+    public Price BasePrice { get; init; }
 
     public MagicWand ToMagicWand()
     {
-        return new MagicWand(Length, FlexibilityFactor, new WandWood(Wood), Core.ToWandCore());
+        return new MagicWand(
+            Length,
+            FlexibilityFactor,
+            new WandWood(Wood),
+            Core.ToWandCore(),
+            PreviousOwners,
+            BasePrice);
     }
 }
 

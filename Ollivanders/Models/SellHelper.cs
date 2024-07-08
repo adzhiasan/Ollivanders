@@ -8,7 +8,7 @@ public static class SellHelper
     {
         if (magicWand.IsSold)
             throw new ValidationException($"Magic wand with this id={magicWand.Id} already sold.");
-        if (magicWand.Mages.Any() && buyer.DateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-18))
+        if (magicWand.Mages.Any() && IsAdult(buyer.DateOfBirth))
             throw new ValidationException("Younger than 18 years.");
 
         magicWand.IsSold = true;
@@ -16,4 +16,6 @@ public static class SellHelper
 
         return magicWand;
     }
+
+    private static bool IsAdult(DateOnly dateOfBirth) => dateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-18);
 }
