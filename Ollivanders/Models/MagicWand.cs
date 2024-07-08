@@ -16,9 +16,9 @@ public class MagicWand
             throw new ArgumentException(nameof(length));
         if (flexibilityFactor is < 0.01 or > 0.2)
             throw new ArgumentException(nameof(flexibilityFactor));
-        if (previousOwners.Count == 0 && core is null)
+        if (core is null && previousOwners.Count == 0)
             throw new ArgumentException("Not collection wands must have core");
-        if (previousOwners.Count == 0 && basePrice is null)
+        if (basePrice is null && previousOwners.Count == 0)
             throw new ArgumentException("Collection wand must have base price");
 
         Length = length;
@@ -44,13 +44,3 @@ public class MagicWand
         return BasePrice?.Value ?? (Core!.GetPrice() + Wood.GetWoodPrice()).Value;
     }
 }
-
-
-
-
-// 1. Для кого идейно эта программа: это онлайн-магазин, или же приложение для работника магазина?
-// 2. Нужно ли хранить информацию о проданных палочках? Или удалять её?
-// 3. Мы хотим иметь возможность изменять базовую цену компонентов и увеличивающие коэффициенты?
-// 4. Цена палочки фиксирована, то есть высчитана на момент поставки в магазин, или же актуальна в любой момент времени?
-// 5. В каком виде мы получаем информацию о том, совершеннолетний ли покупатель: мы ему на слово верим (то число годиков, которые ему есть) или же у нас есть в базе данных информация о наших покупателях, куда мы можем заглянуть и получить ответ?
-// 6. Как должны выглядеть бывшие владельцы палочки? Это текстовое описание, или же список бывших владельцов, которые покупали палочки в магазине Олливандера?
