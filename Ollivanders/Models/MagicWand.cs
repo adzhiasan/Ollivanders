@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Ollivanders;
 
 public class MagicWand
@@ -38,6 +36,8 @@ public class MagicWand
     public List<int> MageIds { get; set; }
     public bool IsSold { get; set; }
     public Price? BasePrice { get; set; }
+
+    public MagicWandRepairInfo RepairInfo { get; set; }
 
     public double GetPrice()
     {
