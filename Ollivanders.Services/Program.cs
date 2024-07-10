@@ -12,8 +12,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 });
 
 builder.Services.AddScoped<MagicWandRepository>();
+builder.Services.AddScoped<CollectionMagicWandRepository>();
 builder.Services.AddScoped<MagesRepository>();
-builder.Services.AddScoped<MageMagicWandRepository>();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Ollivanders.Models;
 
 namespace Ollivanders.Services.Database;
 
@@ -15,10 +16,11 @@ public sealed class DatabaseContext : DbContext
             .ToTable("MagicWands");
         
         modelBuilder
+            .Entity<MagicWand>()
+            .ToTable("CollectionMagicWands");
+        
+        modelBuilder
             .Entity<Mage>()
             .ToTable("Mages");
-        
-        modelBuilder.Entity<MageMagicWand>()
-            .ToTable("MageMagicWands");
     }
 }

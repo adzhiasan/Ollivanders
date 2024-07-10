@@ -1,4 +1,6 @@
-namespace Ollivanders.Services.Controllers;
+using Ollivanders.Models;
+
+namespace Ollivanders.Services.Controllers.Dtos;
 
 public class MagicWandRequestDto
 {
@@ -6,8 +8,6 @@ public class MagicWandRequestDto
     public double FlexibilityFactor { get; init; }
     public required string Wood { get; init; }
     public required CoreDto Core { get; init; }
-    public List<int> PreviousOwners { get; init; }
-    public Price BasePrice { get; init; }
 
     public MagicWand ToMagicWand()
     {
@@ -15,20 +15,22 @@ public class MagicWandRequestDto
             Length,
             FlexibilityFactor,
             new WandWood(Wood),
-            Core.ToWandCore(),
-            PreviousOwners,
-            BasePrice);
+            Core.ToWandCore());
     }
 }
 
-public sealed class MagicWandResponseDto : MagicWandRequestDto
+public sealed class MagicWandResponseDto
 {
+    public int Length { get; init; }
+    public double FlexibilityFactor { get; init; }
+    public required string Wood { get; init; }
+    public required CoreDto Core { get; init; }
     public double Price { get; init; }
 }
 
 internal static class MagicWandExtensions
 {
-    public static MagicWandResponseDto ToMagicWandResponseDto(this MagicWand magicWand)
+    public static MagicWandResponseDto ToMagicWandResponseDto(this Models.MagicWand magicWand)
     {
         return new MagicWandResponseDto
         {

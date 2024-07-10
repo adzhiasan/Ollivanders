@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Ollivanders.Models;
 
 namespace Ollivanders.Services.Database;
 
@@ -23,7 +24,7 @@ public sealed class MagicWandRepository
     
     public async Task<MagicWand?> TryGetByIdAsync(int id)
     {
-        return await _set.Include(mw => mw.Mages).SingleOrDefaultAsync(w => w.Id == id);
+        return await _set.SingleOrDefaultAsync(w => w.Id == id);
     }
     
     public async Task<MagicWand> GetByIdAsync(int id)
@@ -37,9 +38,8 @@ public sealed class MagicWandRepository
         await _databaseContext.SaveChangesAsync();
     }
 
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(MagicWand magicWand)
     {
-        var magicWand = await GetByIdAsync(id);
         _set.Remove(magicWand);
         
         await _databaseContext.SaveChangesAsync();

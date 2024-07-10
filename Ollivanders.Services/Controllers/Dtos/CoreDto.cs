@@ -1,4 +1,4 @@
-namespace Ollivanders.Services.Controllers;
+namespace Ollivanders.Services.Controllers.Dtos;
 
 public record CoreDto
 {

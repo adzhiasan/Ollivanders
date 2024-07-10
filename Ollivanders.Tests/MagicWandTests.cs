@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Ollivanders.Models;
 
 namespace Ollivanders.Tests;
 

@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Ollivanders.Services.Controllers.Dtos;
 using Ollivanders.Services.Database;
 
 namespace Ollivanders.Services.Controllers;
@@ -7,43 +7,12 @@ namespace Ollivanders.Services.Controllers;
 public sealed class MagicWandController : ControllerBase
 {
     private readonly MagicWandRepository _magicWandRepository;
-    private readonly MagesRepository _magesRepository;
-    private readonly MageMagicWandRepository _mageMagicWandRepository;
 
-    public MagicWandController(MagicWandRepository repository, MagesRepository magesRepository,
-        MageMagicWandRepository mageMagicWandRepository)
+    public MagicWandController(MagicWandRepository magicWandRepository)
     {
-        _magicWandRepository = repository;
-        _magesRepository = magesRepository;
-        _mageMagicWandRepository = mageMagicWandRepository;
+        _magicWandRepository = magicWandRepository;
     }
-
-    [HttpPut("sell")]
-    public async Task<IActionResult> SellMagicWandById([FromQuery] int magicWandId, [FromQuery] int mageId)
-    {
-        var magicWand = await _magicWandRepository.TryGetByIdAsync(magicWandId);
-        if (magicWand is null)
-            throw new ValidationException($"Magic wand with this id={magicWand.Id} not found.");
-
-        var mage = await _magesRepository.TryGetByIdAsync(mageId);
-        if (mage is null)
-            throw new ValidationException($"Mage with this id={magicWand.Id} not found.");
-
-        MagicWand soldMagicWand;
-        try
-        {
-            soldMagicWand = SellHelper.SellMagicWand(magicWand, mage);
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-
-        await _magicWandRepository.UpdateAsync(soldMagicWand);
-
-        return Ok();
-    }
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMagicWandById(int id)
     {
@@ -53,7 +22,16 @@ public sealed class MagicWandController : ControllerBase
 
         return Ok(magicWand.ToMagicWandResponseDto());
     }
+    
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateMagicWand([FromBody] MagicWandRequestDto dto)
+    {
+        var magicWand = dto.ToMagicWand();
+        var result = await _magicWandRepository.CreateAsync(magicWand);
 
+        return Ok(result);
+    }
+    
     [HttpGet("price/{id}")]
     public async Task<IActionResult> GetMagicWandPriceById(int id)
     {
@@ -66,15 +44,16 @@ public sealed class MagicWandController : ControllerBase
         return Ok(result);
     }
 
-
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateMagicWand([FromBody] MagicWandRequestDto dto)
+    [HttpPut("sell/{magicWandId}")]
+    public async Task<IActionResult> SellMagicWandById([FromQuery] int magicWandId)
     {
-        var magicWand = dto.ToMagicWand();
-        var result = await _magicWandRepository.CreateAsync(magicWand);
-        await _mageMagicWandRepository.CreateRangeAsync(
-            dto.PreviousOwners.Select(po => new MageMagicWand(po, result.Id)).ToList());
+        var magicWand = await _magicWandRepository.TryGetByIdAsync(magicWandId);
+        if (magicWand is null)
+            return BadRequest($"Magic wand with this id={magicWand.Id} not found.");
 
-        return Ok(result);
+        // some sell logic could be.
+        await _magicWandRepository.RemoveAsync(magicWand);
+
+        return Ok($"Magic wand was sold for {magicWand.GetPrice()} galleons.");
     }
 }
