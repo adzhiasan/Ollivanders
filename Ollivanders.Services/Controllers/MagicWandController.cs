@@ -9,7 +9,6 @@ public sealed class MagicWandController : ControllerBase
     private readonly MagicWandRepository _magicWandRepository;
     private readonly MagesRepository _magesRepository;
     private readonly MageMagicWandRepository _mageMagicWandRepository;
-    private readonly MagicWandRepairInfoRepository _magicWandRepairInfoRepository;
 
     public MagicWandController(MagicWandRepository repository, MagesRepository magesRepository,
         MageMagicWandRepository mageMagicWandRepository)
@@ -65,20 +64,6 @@ public sealed class MagicWandController : ControllerBase
         var result = magicWand.GetPrice();
 
         return Ok(result);
-    }
-
-    [HttpPost("repair")]
-    public async Task<IActionResult> RepairMagicWandPartAsync([FromBody] MagicWandRepairDto repairDto)
-    {
-        var repairInfo = await _magicWandRepairInfoRepository.TryGetByMagicWandIdAsync(repairDto.MagicWandId);
-        if (repairInfo is null)
-            return BadRequest($"Magic wand repair info with this id={repairDto.MagicWandId} not found.");
-
-        var partToRepair = repairInfo.GetPartToRepair(repairDto.Part);
-        var result = partToRepair.TryRepair();
-        await _magicWandRepairInfoRepository.SaveAsync();
-
-        return result ? Ok(result) : BadRequest("Magic wand can not be repaired.");
     }
 
     [HttpPost("create")]

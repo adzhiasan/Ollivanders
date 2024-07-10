@@ -21,18 +21,6 @@ public class MagicWandRequestDto
     }
 }
 
-public class MagicWandRepairDto
-{
-    public int MagicWandId { get; set; }
-    public WandPart Part { get; set; }
-}
-
-public enum WandPart
-{
-    Wood,
-    Core
-}
-
 public sealed class MagicWandResponseDto : MagicWandRequestDto
 {
     public double Price { get; init; }
