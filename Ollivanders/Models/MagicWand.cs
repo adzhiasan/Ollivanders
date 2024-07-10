@@ -1,8 +1,12 @@
-namespace Ollivanders;
+namespace Ollivanders.Models;
 
 public class MagicWand
 {
-    public MagicWand(int length, double flexibilityFactor, WandWood wood, WandCore core)
+    public MagicWand(
+        int length,
+        double flexibilityFactor,
+        WandWood wood,
+        WandCore core)
     {
         if (length is < 18 or > 50)
             throw new ArgumentException(nameof(length));

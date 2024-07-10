@@ -1,4 +1,6 @@
-namespace Ollivanders.Services.Controllers;
+using Ollivanders.Models;
+
+namespace Ollivanders.Services.Controllers.Dtos;
 
 public class MagicWandRequestDto
 {
@@ -9,12 +11,20 @@ public class MagicWandRequestDto
 
     public MagicWand ToMagicWand()
     {
-        return new MagicWand(Length, FlexibilityFactor, new WandWood(Wood), Core.ToWandCore());
+        return new MagicWand(
+            Length,
+            FlexibilityFactor,
+            new WandWood(Wood),
+            Core.ToWandCore());
     }
 }
 
-public sealed class MagicWandResponseDto : MagicWandRequestDto
+public sealed class MagicWandResponseDto
 {
+    public int Length { get; init; }
+    public double FlexibilityFactor { get; init; }
+    public required string Wood { get; init; }
+    public required CoreDto Core { get; init; }
     public double Price { get; init; }
 }
 
