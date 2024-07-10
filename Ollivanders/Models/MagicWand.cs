@@ -37,8 +37,6 @@ public class MagicWand
     public bool IsSold { get; set; }
     public Price? BasePrice { get; set; }
 
-    public MagicWandRepairInfo RepairInfo { get; set; }
-
     public double GetPrice()
     {
         return BasePrice?.Value ?? (Core!.GetPrice() + Wood.GetWoodPrice()).Value;
