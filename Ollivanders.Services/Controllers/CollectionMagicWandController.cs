@@ -60,7 +60,7 @@ public sealed class CollectionMagicWandController : ControllerBase
             return BadRequest($"Mage with this id={mageId} not found.");
 
         if (IsAdult(mage.DateOfBirth))
-            BadRequest("Younger than 18 years.");
+            return BadRequest("Younger than 18 years.");
 
         // some sell logic could be.
         await _collectionMagicWandRepository.RemoveAsync(magicWand);

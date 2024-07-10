@@ -35,7 +35,7 @@ public sealed class CollectionMagicWandResponseDto
 
 internal static class CollectionMagicWandExtensions
 {
-    public static CollectionMagicWandResponseDto ToMagicWandResponseDto(this Models.CollectionMagicWand magicWand)
+    public static CollectionMagicWandResponseDto ToMagicWandResponseDto(this CollectionMagicWand magicWand)
     {
         return new CollectionMagicWandResponseDto
         {

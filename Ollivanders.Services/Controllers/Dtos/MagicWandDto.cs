@@ -30,7 +30,7 @@ public sealed class MagicWandResponseDto
 
 internal static class MagicWandExtensions
 {
-    public static MagicWandResponseDto ToMagicWandResponseDto(this Models.MagicWand magicWand)
+    public static MagicWandResponseDto ToMagicWandResponseDto(this MagicWand magicWand)
     {
         return new MagicWandResponseDto
         {

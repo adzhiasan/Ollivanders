@@ -16,7 +16,7 @@ public sealed class DatabaseContext : DbContext
             .ToTable("MagicWands");
         
         modelBuilder
-            .Entity<MagicWand>()
+            .Entity<CollectionMagicWand>()
             .ToTable("CollectionMagicWands");
         
         modelBuilder
