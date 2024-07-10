@@ -62,8 +62,12 @@ public sealed class CollectionMagicWandController : ControllerBase
         if (IsAdult(mage.DateOfBirth))
             BadRequest("Younger than 18 years.");
 
-        return Ok();
+        // some sell logic could be.
+        await _collectionMagicWandRepository.RemoveAsync(magicWand);
+        
+        return Ok($"Collection magic wand was sold for {magicWand.BasePrice.Value} galleons.");
 
+        
         bool IsAdult(DateOnly dateOfBirth) => dateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-18);
     }
 }

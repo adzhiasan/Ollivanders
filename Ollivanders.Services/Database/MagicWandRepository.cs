@@ -26,17 +26,6 @@ public sealed class MagicWandRepository
     {
         return await _set.SingleOrDefaultAsync(w => w.Id == id);
     }
-    
-    public async Task<MagicWand> GetByIdAsync(int id)
-    {
-        return await _set.SingleAsync(w => w.Id == id);
-    }
-    
-    public async Task UpdateAsync(MagicWand magicWand)
-    {
-        _set.Update(magicWand);
-        await _databaseContext.SaveChangesAsync();
-    }
 
     public async Task RemoveAsync(MagicWand magicWand)
     {

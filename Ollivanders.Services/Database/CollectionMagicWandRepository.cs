@@ -29,22 +29,10 @@ public sealed class CollectionMagicWandRepository
             .SingleOrDefaultAsync(w => w.Id == id);
     }
 
-    public async Task UpdateAsync(CollectionMagicWand magicWand)
+    public async Task RemoveAsync(CollectionMagicWand collectionMagicWand)
     {
-        _set.Update(magicWand);
-        await _databaseContext.SaveChangesAsync();
-    }
-
-    public async Task RemoveAsync(int id)
-    {
-        var magicWand = await GetByIdAsync(id);
-        _set.Remove(magicWand);
+        _set.Remove(collectionMagicWand);
 
         await _databaseContext.SaveChangesAsync();
-    }
-
-    private async Task<CollectionMagicWand> GetByIdAsync(int id)
-    {
-        return await _set.SingleAsync(w => w.Id == id);
     }
 }

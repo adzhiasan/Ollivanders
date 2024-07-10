@@ -45,7 +45,7 @@ public sealed class MagicWandController : ControllerBase
     }
 
     [HttpPut("sell/{magicWandId}")]
-    public async Task<IActionResult> SellMagicWandById([FromQuery] int magicWandId)
+    public async Task<IActionResult> SellMagicWandById([FromRoute] int magicWandId)
     {
         var magicWand = await _magicWandRepository.TryGetByIdAsync(magicWandId);
         if (magicWand is null)
