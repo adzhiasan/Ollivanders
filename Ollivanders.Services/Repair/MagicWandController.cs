@@ -26,6 +26,8 @@ public class MagicWandController : ControllerBase
             return BadRequest(ex.Message);
         }
 
+        await _magicWandRepository.SaveAsync();
+
         return Ok();
     }
 }
